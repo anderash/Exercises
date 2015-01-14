@@ -15,6 +15,9 @@ func someGoroutine1() {
         i++
     }
 }
+func someGoroutine2() {
+    
+}
 
 
 
