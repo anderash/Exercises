@@ -16,7 +16,8 @@ func someGoroutine1() {
     }
 }
 func someGoroutine2() {
-    
+    while{
+    }
 }
 
 
