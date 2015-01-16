@@ -11,13 +11,13 @@ import (
 )
 
 func someGoroutine1() {
-    while (i<1000000) {
+    for (j = 0; j<1000000; j++) {
         i++
     }
 }
 func someGoroutine2() {
-    while{
-    }
+    for (j = 0; j<1000000; j++) {
+        i--
 }
 
 
