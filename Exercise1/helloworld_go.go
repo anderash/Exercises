@@ -8,14 +8,14 @@ import (
 
 
 
-func someGoroutine1(chan c int) {
+func someGoroutine1(c chan int) {
 	for j := 0; j<1000000; j++ {
 		i:= <- c
 		i++
 		c <- i
 	}
 }
-func someGoroutine2(chan c int) {
+func someGoroutine2(c chan int) {
 	for j := 0; j<1000000; j++ {
 		i := <- c
 		i--
