@@ -6,18 +6,18 @@ import (
 	"time"
 )
 
-var i int = 0
+
 
 func someGoroutine1(chan c int) {
 	for j := 0; j<1000000; j++ {
-		i <- c
+		i:= <- c
 		i++
 		c <- i
 	}
 }
 func someGoroutine2(chan c int) {
 	for j := 0; j<1000000; j++ {
-		i <- c
+		i := <- c
 		i--
 		c <- i
 	}
