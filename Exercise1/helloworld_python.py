@@ -20,10 +20,10 @@ def someThreadFunction2():
 # In Python you "import" a global variable, instead of "export"ing it when you declare it
 # (This is probably an effort to make you feel bad about typing the word "global")
 
-
+l = Lock()
 
 def main():
-	l = Lock()
+
 	someThread1 = Thread(target = someThreadFunction1, args = (),)
 	someThread2 = Thread(target = someThreadFunction2, args = (),)
 	someThread1.start()
