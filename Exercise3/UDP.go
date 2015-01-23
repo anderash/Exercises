@@ -6,8 +6,9 @@ import (
 )
 
 func main() {
-  buffer := byte
-  l, err := net.Dial("udp", ":30000")
-  fmt.Printf(l)
+  buffer byte
+  conn, err := net.Dial("udp", ":30000")
+  addr := conn.LocalAddr()
+  fmt.Printf(addr.String())
 }
   
