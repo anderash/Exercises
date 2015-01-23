@@ -4,12 +4,16 @@ i = 0
 
 def someThreadFunction1():
 	for j in range (0, 1000000):
+		Lock.acquire()
 		i += 1 
+		Lock.release()
 	print("Hello from a thread 1!")
 
 def someThreadFunction2():
 	for j in range (0, 1000000):
-		i -= 1 
+		Lock.acquire()
+		i -= 1
+		Lock.release()
 	print("Hello from a thread 2!")
 
 # Potentially useful thing:
