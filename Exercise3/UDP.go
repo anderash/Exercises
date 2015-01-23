@@ -13,6 +13,6 @@ func main() {
   }
   
   addr := conn.LocalAddr()
-  fmt.Printf(addr.String())
+  fmt.Printf(addr.Network())
 }
   
