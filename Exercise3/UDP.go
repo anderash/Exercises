@@ -5,14 +5,21 @@ import (
   "net"
 )
 
+// constant ()
 func main() {
- // var buffer byte = 0 
-  conn, err := net.Dial("udp", ":30000")
+
+	serverAddr, err := net.ResolveUDPAddr("udp","129.241.187.255:30000" )
+
+ 	buffer := make([]byte,1024)
+  // conn, err := net.Dial("udp", "129.241.187.255:30000")
   if err != nil {
     fmt.Printf("Noe gikk til helvette")
   }
-  
-  addr := conn.LocalAddr()
-  fmt.Printf(addr.Network(), "\n")
+
+	connUDP, _ := net.ListenUDP("udp4", serverAddr)  
+
+	n, _, _ := connUDP.ReadFromUDP(buffer)
+
+	fmt.Printf("%s%i \n", buffer, n)
 }
   
