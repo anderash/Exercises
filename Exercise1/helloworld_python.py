@@ -23,7 +23,7 @@ def someThreadFunction2():
 
 
 def main():
-	
+	lock = Lock()
 	someThread1 = Thread(target = someThreadFunction1, args = (),)
 	someThread2 = Thread(target = someThreadFunction2, args = (),)
 	someThread1.start()
