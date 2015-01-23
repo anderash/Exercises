@@ -1,8 +1,10 @@
 from threading import Thread, Lock
 i = 0
-
+l = Lock()
 
 def someThreadFunction1():
+	global i
+	global l
 	for j in range (0, 1000000):
 		l.acquire()
 		i += 1 
@@ -10,6 +12,8 @@ def someThreadFunction1():
 	print("Hello from a thread 1!")
 
 def someThreadFunction2():
+	global i
+	global l
 	for j in range (0, 1000000):
 		l.acquire()
 		i -= 1
@@ -20,10 +24,10 @@ def someThreadFunction2():
 # In Python you "import" a global variable, instead of "export"ing it when you declare it
 # (This is probably an effort to make you feel bad about typing the word "global")
 
-l = Lock()
+
 
 def main():
-
+	
 	someThread1 = Thread(target = someThreadFunction1, args = (),)
 	someThread2 = Thread(target = someThreadFunction2, args = (),)
 	someThread1.start()
