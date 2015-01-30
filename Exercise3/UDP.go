@@ -24,6 +24,14 @@ func callUDP() {
 	fmt.Printf("%s%i \n", buffer, n)
 }
   
+func sendUDP() {
+  serverAddr, err1 := net.ResolveUDPAddr("udp", "129.241.187.255:20001" )
+
+  info := make([]byte,1024)
+  
+  UDPconn, err2 := DialUDP()
+}
+
 func main() {
   callUDP()
   
