@@ -6,7 +6,8 @@ import (
 )
 
 // constant ()
-func main() {
+
+func callUDP() {
 
 	serverAddr, err := net.ResolveUDPAddr("udp","129.241.187.255:30000" )
 
@@ -23,3 +24,7 @@ func main() {
 	fmt.Printf("%s%i \n", buffer, n)
 }
   
+func main() {
+  callUDP()
+  
+}
