@@ -2,36 +2,38 @@
 package main
 
 import (
-	"fmt"
 	"./network"
+	"./phoenix"
 	"runtime"
 	"time"
-
-	)
+	"strconv"
+)
 
 func main() {
-	melding := "I am alive"
 
 	c_listen := make(chan []byte)
-	c_broadcast := make(chan []byte)
+	//c_broadcast := make(chan []byte)
 
+	cnt := 0
 
 	runtime.GOMAXPROCS(runtime.NumCPU())
 
-	go network.UDPBroadcast(c_broadcast)
 	go network.UDPListen(c_listen)
 
-	for{
-		c_broadcast <- []byte(melding)
-		time.Sleep(1000*time.Millisecond)
-		listen_message := <- c_listen
-		fmt.Printf("%s", string(listen_message)+"\n")
+	select {
+	case melding := <-c_listen: //Skal bli backup
+		buffer := string(melding)
+		cnt, _ = strconv.Atoi(buffer)
+		go phoenix.Backup(cnt, c_listen)
+
+	case <-time.After(3000 * time.Millisecond):
+		go phoenix.Primary(cnt)
+
 	}
-	
 
-
+	c := make(chan int)
+	<- c
 
 	//fmt.Printf("Antall bytes sendt: %i", nrBsendt)
-
 
 }
