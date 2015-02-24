@@ -8,6 +8,7 @@ import (
 	"time"
 	//"encoding/binary"
 	"strconv"
+	"strings"
 )
 
 func Primary(cnt int) {
@@ -40,19 +41,25 @@ func Primary(cnt int) {
 
 func Backup(cnt int, c_listen chan []byte, c_close chan int) {
 	buffer := ""
-
+	netCnt := cnt
 	for {
 		select {
 
 		case Melding := <-c_listen:
-			buffer = string(Melding)
+			buffer = string(Melding[0:2])
+			buffer = strings.Trim(buffer, "")
+			for i := 0; i < 2; i++ {
+				fmt.Println(buffer[i])
+			}			
 			fmt.Printf("Backupread:"+buffer+"\n")
-			cnt, _ = strconv.Atoi(buffer)
+			netCnt, _ = strconv.Atoi(buffer)
+			fmt.Println(netCnt)
 
 		case <-time.After(2000 * time.Millisecond):
 			c_close <- 1
-			fmt.Println(cnt)
-			go Primary(cnt)
+			fmt.Printf("cnt nr primary: ")
+			fmt.Println(netCnt)
+			go Primary(netCnt)
 			return
 		}
 	}

@@ -12,14 +12,13 @@ import (
 
 func main() {
 
-	c_listen := make(chan []byte, 1024)
+	c_listen := make(chan []byte, 8)
 	c_close := make(chan int, 8)
 	//c_broadcast := make(chan []byte)
 
 	cnt := 0
 
 	runtime.GOMAXPROCS(runtime.NumCPU())
-	fmt.Printf("For UDP\n")
 	go network.UDPListen(c_listen, c_close)
 	fmt.Printf("Select state\n")
 	select {
