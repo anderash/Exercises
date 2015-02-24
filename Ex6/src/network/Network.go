@@ -4,19 +4,19 @@ package network
 import (
 	"fmt"
 	"net"
-	//"time"
+	"time"
 	"os"
 )
 
 const (
 	OwnIP   = "129.241.187.140"
-	OwnPort = "20001"
+	OwnPort = "30001"
 	Baddr   = "129.241.187.255"
 )
 
 func UDPBroadcast(c_broadcast chan []byte) {
 
-	raddr, err1 := net.ResolveUDPAddr("udp", Baddr+":"+OwnPort)
+	raddr, err1 := net.ResolveUDPAddr("udp", "localhost:"+OwnPort)
 
 	if err1 != nil {
 		fmt.Printf("Problemer med resolveUDPaddr")
@@ -44,29 +44,41 @@ func UDPBroadcast(c_broadcast chan []byte) {
 
 }
 
-func UDPListen(c_listen chan []byte) {
+func UDPListen(c_listen chan []byte, c_close chan bool) {
 	buffer := make([]byte, 1024)
 
-	raddr, err1 := net.ResolveUDPAddr("udp", Baddr+":"+OwnPort)
+	raddr, err1 := net.ResolveUDPAddr("udp", "localhost:"+OwnPort)
 
 	if err1 != nil {
 		fmt.Printf("Problemer med resolveUDPaddr")
 		os.Exit(4)
 	}
 
-	socket, _ := net.ListenUDP("udp4", raddr)
+	socket, _ := net.ListenUDP("udp", raddr)
 
 	for {
-		_, err4 := socket.Read(buffer)
+		select{
+			case lukk := <- c_close:
+				fmt.Printf("skal lukke\n")
+				if (lukk){
+					fmt.Printf("Closing\n")
+					socket.Close()
+					fmt.Printf("Closing connection\n")
+				}
+				
+			case <-time.After(500 * time.Millisecond):
+				_, err4 := socket.Read(buffer)
 
-		if err4 != nil {
-			fmt.Printf("Problemer med readUDP")
-			os.Exit(5)
+				if err4 != nil {
+					fmt.Printf("Problemer med readUDP")
+					os.Exit(5)
+				}
+
+				//fmt.Printf(string(buffer))
+				c_listen <- buffer
+				//time.Sleep(100*time.Millisecond)
 		}
 
-		//fmt.Printf(string(buffer))
-		c_listen <- buffer
-		//time.Sleep(100*time.Millisecond)
 
 	}
 

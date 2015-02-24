@@ -7,27 +7,37 @@ import (
 	"runtime"
 	"time"
 	"strconv"
+	"fmt"
 )
 
 func main() {
 
 	c_listen := make(chan []byte)
+	c_close := make(chan bool,1024)
 	//c_broadcast := make(chan []byte)
 
 	cnt := 0
 
 	runtime.GOMAXPROCS(runtime.NumCPU())
-
-	go network.UDPListen(c_listen)
-
+	fmt.Printf("For UDP\n")
+	go network.UDPListen(c_listen, c_close)
+	fmt.Printf("Select state\n")
 	select {
 	case melding := <-c_listen: //Skal bli backup
 		buffer := string(melding)
 		cnt, _ = strconv.Atoi(buffer)
+		fmt.Printf("For backup")
 		go phoenix.Backup(cnt, c_listen)
+
 
 	case <-time.After(3000 * time.Millisecond):
 		go phoenix.Primary(cnt)
+		fmt.Printf("Skal sende\n")
+		c_close <- true
+		fmt.Printf("Sendt\n")
+
+
+
 
 	}
 
