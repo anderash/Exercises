@@ -2,10 +2,10 @@
 package phoenix
 
 import (
-	"fmt"
-	"time"
 	"../network"
+	"fmt"
 	"os/exec"
+	"time"
 	//"encoding/binary"
 	"strconv"
 )
@@ -21,7 +21,7 @@ func Primary(cnt int) {
 	newHo := exec.Command("gnome-terminal", "-x", "sh", "-c", "go run main1.go")
 	//returnerer et sett datainstrukser. err = newHo.Run() //Starter ny terminal
 	err := newHo.Run()
-	if err != nil{
+	if err != nil {
 		fmt.Printf("Feil med exec")
 	}
 	for {
@@ -43,6 +43,7 @@ func Backup(cnt int, c_listen chan []byte) {
 
 	for {
 		select {
+
 		case Melding := <-c_listen:
 			buffer = string(Melding)
 			cnt, _ = strconv.Atoi(buffer)

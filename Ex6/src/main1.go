@@ -13,7 +13,7 @@ import (
 func main() {
 
 	c_listen := make(chan []byte)
-	c_close := make(chan bool,1024)
+	c_close := make(chan int, 8)
 	//c_broadcast := make(chan []byte)
 
 	cnt := 0
@@ -31,10 +31,11 @@ func main() {
 
 
 	case <-time.After(3000 * time.Millisecond):
-		go phoenix.Primary(cnt)
+		
 		fmt.Printf("Skal sende\n")
-		c_close <- true
+		c_close <- 1
 		fmt.Printf("Sendt\n")
+		go phoenix.Primary(cnt)
 
 
 

@@ -44,7 +44,7 @@ func UDPBroadcast(c_broadcast chan []byte) {
 
 }
 
-func UDPListen(c_listen chan []byte, c_close chan bool) {
+func UDPListen(c_listen chan []byte, c_close chan int) {
 	buffer := make([]byte, 1024)
 
 	raddr, err1 := net.ResolveUDPAddr("udp", "localhost:"+OwnPort)
@@ -55,12 +55,13 @@ func UDPListen(c_listen chan []byte, c_close chan bool) {
 	}
 
 	socket, _ := net.ListenUDP("udp", raddr)
+	fmt.Printf("Opened socket\n")
 
 	for {
 		select{
 			case lukk := <- c_close:
 				fmt.Printf("skal lukke\n")
-				if (lukk){
+				if (lukk == 1){
 					fmt.Printf("Closing\n")
 					socket.Close()
 					fmt.Printf("Closing connection\n")
