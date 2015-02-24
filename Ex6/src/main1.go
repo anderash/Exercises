@@ -12,7 +12,7 @@ import (
 
 func main() {
 
-	c_listen := make(chan []byte)
+	c_listen := make(chan []byte, 1024)
 	c_close := make(chan int, 8)
 	//c_broadcast := make(chan []byte)
 
@@ -27,7 +27,7 @@ func main() {
 		buffer := string(melding)
 		cnt, _ = strconv.Atoi(buffer)
 		fmt.Printf("For backup")
-		go phoenix.Backup(cnt, c_listen)
+		go phoenix.Backup(cnt, c_listen, c_close)
 
 
 	case <-time.After(3000 * time.Millisecond):

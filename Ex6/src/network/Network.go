@@ -64,7 +64,9 @@ func UDPListen(c_listen chan []byte, c_close chan int) {
 				if (lukk == 1){
 					fmt.Printf("Closing\n")
 					socket.Close()
-					fmt.Printf("Closing connection\n")
+
+					fmt.Printf("Closed connection\n")
+					return
 				}
 				
 			case <-time.After(500 * time.Millisecond):

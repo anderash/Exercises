@@ -38,7 +38,7 @@ func Primary(cnt int) {
 
 }
 
-func Backup(cnt int, c_listen chan []byte) {
+func Backup(cnt int, c_listen chan []byte, c_close chan int) {
 	buffer := ""
 
 	for {
@@ -46,10 +46,14 @@ func Backup(cnt int, c_listen chan []byte) {
 
 		case Melding := <-c_listen:
 			buffer = string(Melding)
+			fmt.Printf("Backupread:"+buffer+"\n")
 			cnt, _ = strconv.Atoi(buffer)
 
 		case <-time.After(2000 * time.Millisecond):
+			c_close <- 1
+			fmt.Println(cnt)
 			go Primary(cnt)
+			return
 		}
 	}
 
