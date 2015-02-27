@@ -76,6 +76,14 @@ procedure exercise7 is
             ---------------------------------------
             -- PART 2: Do the transaction work here             
             ---------------------------------------
+            begin
+                Num := Unreliable_Slow_Add(Num);
+            exception
+                when Count_Failed
+                    Manager.Signal_Abort;
+            end;
+
+            Manager.Finished;
             
             if Manager.Commit = True then
                 Put_Line ("  Worker" & Integer'Image(Initial) & " comitting" & Integer'Image(Num));
@@ -86,6 +94,7 @@ procedure exercise7 is
                 -------------------------------------------
                 -- PART 2: Roll back to previous value here
                 -------------------------------------------
+                Num := Prev;
             end if;
 
             Prev := Num;
