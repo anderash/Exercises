@@ -21,6 +21,17 @@ procedure exercise7 is
             ------------------------------------------
             -- PART 3: Complete the exit protocol here
             ------------------------------------------
+            if Finished'Count = N-1 then
+                Finished_Gate_Open := True;
+            end if;
+            if Finished'Count = 0 then
+                Finished_Gate_Open := False;
+            end if;
+            if Aborted = True then
+                Should_Commit := False;
+            end if;
+
+
         end Finished;
 
         procedure Signal_Abort is
@@ -40,6 +51,8 @@ procedure exercise7 is
     
     function Unreliable_Slow_Add (x : Integer) return Integer is
     Error_Rate : Constant := 0.15;  -- (between 0 and 1)
+    Random_Number : Float;
+    Mult_Number : Float;
     begin
         -------------------------------------------
         -- PART 1: Create the transaction work here
@@ -47,8 +60,9 @@ procedure exercise7 is
         Random_number := Random(Gen);
 
         if Random_number > Error_Rate then
-            delay Duration(10*Random_number);
-            Put_Line("Added 10 to number!")
+            Mult_Number := Random_number*10.0;
+            delay Duration(Mult_Number);
+            Put_Line("Added 10 to number!");
             return x + 10;
         else
             delay Duration(0.5);
@@ -79,7 +93,7 @@ procedure exercise7 is
             begin
                 Num := Unreliable_Slow_Add(Num);
             exception
-                when Count_Failed
+                when Count_Failed =>
                     Manager.Signal_Abort;
             end;
 
