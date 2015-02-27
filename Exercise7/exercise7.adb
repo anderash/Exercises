@@ -44,6 +44,18 @@ procedure exercise7 is
         -------------------------------------------
         -- PART 1: Create the transaction work here
         -------------------------------------------
+        Random_number := Random(Gen);
+
+        if Random_number > Error_Rate then
+            delay Duration(10*Random_number);
+            Put_Line("Added 10 to number!")
+            return x + 10;
+        else
+            delay Duration(0.5);
+            raise Count_Failed;
+            return x;
+        end if;
+
     end Unreliable_Slow_Add;
 
 
